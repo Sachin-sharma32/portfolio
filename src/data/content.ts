@@ -147,11 +147,29 @@ export type Project = {
   role: string;
   stack: string[];
   highlights: string[];
+  /** Optional links — present for open-source / live projects. */
+  repo?: string;
+  live?: string;
 };
 
 export const projects: Project[] = [
   {
     index: '01',
+    title: 'Marginalia',
+    blurb:
+      'A web highlighter I built end-to-end: select text on any page — or clip a moment on YouTube — from a Chrome extension, and it lands in a real-time dashboard. The video-clip instinct from Magnifi, rebuilt solo as a product.',
+    role: 'Solo build · live product',
+    stack: ['Next.js', 'React 19', 'TypeScript', 'Convex', 'Chrome MV3', 'pnpm'],
+    highlights: [
+      'Two surfaces over one backend: a Manifest V3 Chrome extension for capture and a Next.js dashboard for everything saved.',
+      'Convex keeps highlights, notes, collections, whiteboards and to-dos in sync live — highlight in the browser, it appears in the dashboard with no refresh.',
+      'Capture text on any site or mark start/end of a YouTube moment as a replayable clip, all color-coded with notes and tags.',
+    ],
+    repo: 'https://github.com/Sachin-sharma32/highlighter',
+    live: 'https://highlighter-web.vercel.app',
+  },
+  {
+    index: '02',
     title: 'Cross-Repo Rule Engine',
     blurb:
       'A toggle in a React UI becomes a 13-step automated video-highlight pipeline. Three repos, one mental model.',
@@ -164,7 +182,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    index: '02',
+    index: '03',
     title: 'Custom Video Editor',
     blurb:
       'A browser editing surface that has to feel like an instrument — scrub, waveform, overlays — not a form.',
@@ -177,7 +195,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    index: '03',
+    index: '04',
     title: 'Multi-Strategy Auth & RBAC',
     blurb:
       'One identity layer that speaks JWT, SAML/SSO and Basic — across 90+ endpoints and five permission levels.',
@@ -190,7 +208,7 @@ export const projects: Project[] = [
     ],
   },
   {
-    index: '04',
+    index: '05',
     title: 'Realtime Status Layer',
     blurb:
       'Execution status that updates live and still works when you scale the server horizontally.',

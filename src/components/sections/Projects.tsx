@@ -1,9 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Github, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 
 import { Reveal } from '@/components/Reveal';
 import { SectionHeading } from '@/components/SectionHeading';
+import { Button } from '@/components/ui/button';
 import { projects, type Project } from '@/data/content';
 import { useCursor } from '@/hooks/useCursor';
 import { cn } from '@/lib/utils';
@@ -30,6 +31,7 @@ function ProjectRow({
         setCursor('view', 'open');
       }}
       onMouseLeave={() => setCursor('default')}
+      onClick={onHover}
     >
       <div className="mx-auto flex max-w-7xl cursor-pointer items-center gap-6 px-5 py-7 sm:px-8 md:py-9">
         <span className="text-accent font-mono text-sm">{project.index}</span>
@@ -87,6 +89,37 @@ function ProjectRow({
                     </span>
                   ))}
                 </div>
+
+                {(project.repo || project.live) && (
+                  <div className="flex flex-wrap gap-3 pt-2">
+                    {project.live && (
+                      <Button asChild size="sm">
+                        <a
+                          href={project.live}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          onMouseEnter={() => setCursor('hover')}
+                        >
+                          <ExternalLink /> Live demo
+                        </a>
+                      </Button>
+                    )}
+                    {project.repo && (
+                      <Button asChild size="sm" variant="outline">
+                        <a
+                          href={project.repo}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          onMouseEnter={() => setCursor('hover')}
+                        >
+                          <Github /> Source
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>
@@ -105,7 +138,7 @@ export function Projects() {
         <SectionHeading
           index="03 / SELECTED WORK"
           title="Things I designed, broke, and shipped."
-          description="Four systems from the Magnifi video platform. Hover a row to open it."
+          description="A product I built solo, plus systems from the Magnifi video platform. Open a row for details and links."
           className="mb-0"
         />
       </div>
