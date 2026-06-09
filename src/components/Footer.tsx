@@ -1,9 +1,19 @@
+import type { MouseEvent } from 'react';
+
 import { profile } from '@/data/content';
 import { useCursor } from '@/hooks/useCursor';
 
 export function Footer() {
   const { cursorProps } = useCursor();
   const year = new Date().getFullYear();
+
+  // Drive the scroll explicitly: a native `#home` hash jump across this very
+  // tall page gets interrupted by layout shifts and stalls partway (near Work).
+  const scrollToTop = (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  };
 
   return (
     <footer className="border-line border-t">
@@ -22,6 +32,7 @@ export function Footer() {
 
         <a
           href="#home"
+          onClick={scrollToTop}
           className="link-wipe text-muted-bright self-start font-mono text-xs tracking-widest uppercase md:self-auto"
           {...cursorProps('hover')}
         >
