@@ -166,7 +166,7 @@ export const projects: Project[] = [
       'Capture text on any site or mark start/end of a YouTube moment as a replayable clip, all color-coded with notes and tags.',
     ],
     repo: 'https://github.com/Sachin-sharma32/highlighter',
-    live: 'https://highlighter-web.vercel.app',
+    live: 'https://highlighter-web-gdqs.vercel.app/',
   },
   {
     index: '02',
