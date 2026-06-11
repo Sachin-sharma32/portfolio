@@ -1,8 +1,10 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState, type MouseEvent } from 'react';
 
+import { RollingText } from '@/components/RollingText';
 import { useCursor } from '@/hooks/useCursor';
+import { scrollToSection } from '@/lib/scroll';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/useUIStore';
 
@@ -17,6 +19,16 @@ export const navItems = [
 export function Navbar() {
   const { menuOpen, setMenuOpen, toggleMenu, activeSection } = useUIStore();
   const { cursorProps } = useCursor();
+  const [hidden, setHidden] = useState(false);
+  const { scrollY } = useScroll();
+
+  // Slide away while scrolling down, return on the first scroll up —
+  // gives the canvas back to the content.
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    const prev = scrollY.getPrevious() ?? 0;
+    if (latest > prev && latest > 160) setHidden(true);
+    else setHidden(false);
+  });
 
   // Lock body scroll while the mobile overlay is open.
   useEffect(() => {
@@ -26,12 +38,23 @@ export function Navbar() {
     };
   }, [menuOpen]);
 
+  const go = (id: string) => (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setMenuOpen(false);
+    scrollToSection(id);
+  };
+
   return (
     <>
-      <header className="border-line bg-ink/80 fixed inset-x-0 top-0 z-50 border-b backdrop-blur-md">
+      <motion.header
+        className="border-line bg-ink/80 fixed inset-x-0 top-0 z-50 border-b backdrop-blur-md"
+        animate={{ y: hidden && !menuOpen ? '-100%' : '0%' }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      >
         <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8">
           <a
             href="#home"
+            onClick={go('home')}
             className="group flex items-center gap-2 font-mono text-sm font-bold tracking-wider"
             {...cursorProps('hover')}
           >
@@ -48,8 +71,9 @@ export function Navbar() {
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
+                  onClick={go(item.id)}
                   className={cn(
-                    'relative px-4 py-2 font-mono text-xs tracking-widest uppercase transition-colors',
+                    'group/roll relative px-4 py-2 font-mono text-xs tracking-widest uppercase transition-colors',
                     activeSection === item.id
                       ? 'text-accent'
                       : 'text-muted-bright hover:text-foreground'
@@ -61,7 +85,7 @@ export function Navbar() {
                       /
                     </span>
                   )}
-                  {item.label}
+                  <RollingText text={item.label} />
                 </a>
               </li>
             ))}
@@ -69,10 +93,11 @@ export function Navbar() {
 
           <a
             href="#contact"
-            className="link-wipe text-foreground hidden font-mono text-xs tracking-widest uppercase md:inline-block"
+            onClick={go('contact')}
+            className="group/roll text-foreground hover:text-accent hidden font-mono text-xs tracking-widest uppercase transition-colors md:inline-block"
             {...cursorProps('hover')}
           >
-            Let&apos;s talk →
+            <RollingText text="Let's talk →" />
           </a>
 
           {/* Mobile toggle */}
@@ -86,7 +111,7 @@ export function Navbar() {
             {menuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </nav>
-      </header>
+      </motion.header>
 
       {/* Mobile overlay */}
       <AnimatePresence>
@@ -108,7 +133,7 @@ export function Navbar() {
                 >
                   <a
                     href={`#${item.id}`}
-                    onClick={() => setMenuOpen(false)}
+                    onClick={go(item.id)}
                     className="flex items-baseline gap-4 py-2"
                   >
                     <span className="text-accent font-mono text-xs">0{i + 1}</span>

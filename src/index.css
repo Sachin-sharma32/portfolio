@@ -101,10 +101,53 @@
   }
 }
 
+/* Lenis smooth-scroll plumbing. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 @layer utilities {
   /* Hairline structural rules used across sections. */
   .rule {
     border-color: var(--color-line);
+  }
+
+  /*
+   * Light "paper" theme scope — flips a section to inverted ink-on-paper.
+   * Every token-driven utility (text-foreground, border-line…) follows along.
+   */
+  .theme-paper {
+    --color-background: var(--color-paper);
+    --color-foreground: var(--color-ink);
+    --color-line: #d9d9d0;
+    --color-line-soft: #e6e6dd;
+    --color-muted: #8a8a80;
+    --color-muted-bright: #50504a;
+    --color-ink-soft: #ebebe2;
+    --color-border: var(--color-line);
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .theme-paper ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  /* Outlined display type. */
+  .text-stroke-accent {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--color-accent);
+  }
+  .text-stroke-faint {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--color-line);
   }
 
   .text-balance {

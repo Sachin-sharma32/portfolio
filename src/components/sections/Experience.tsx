@@ -1,16 +1,53 @@
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEffect, useRef } from 'react';
+
 import { Reveal } from '@/components/Reveal';
 import { SectionHeading } from '@/components/SectionHeading';
 import { education, experiences } from '@/data/content';
 
+gsap.registerPlugin(ScrollTrigger);
+
 export function Experience() {
+  const timeline = useRef<HTMLDivElement>(null);
+
+  // The cyan spine draws itself down the timeline as the reader scrolls.
+  useEffect(() => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !timeline.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '[data-spine]',
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: timeline.current,
+            start: 'top 70%',
+            end: 'bottom 60%',
+            scrub: 0.5,
+          },
+        }
+      );
+    }, timeline);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section id="experience" className="border-line border-t py-24 md:py-36">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeading index="04 / TRACK RECORD" title="Where I've been putting in reps." />
 
-        <div className="relative">
-          {/* Spine */}
+        <div ref={timeline} className="relative">
+          {/* Static track + animated cyan spine */}
           <span className="bg-line absolute top-2 left-0 hidden h-full w-px md:block" />
+          <span
+            data-spine
+            className="bg-accent absolute top-2 left-0 hidden h-full w-px origin-top md:block"
+          />
 
           <ol className="space-y-px">
             {experiences.map((exp, i) => (

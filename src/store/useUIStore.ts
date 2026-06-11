@@ -16,6 +16,10 @@ type UIState = {
   /** Section currently in view, for nav highlighting. */
   activeSection: string;
   setActiveSection: (id: string) => void;
+
+  /** Flips true when the preloader curtain has lifted — gates the hero intro. */
+  loaderDone: boolean;
+  setLoaderDone: () => void;
 };
 
 export const useUIStore = create<UIState>((set) => ({
@@ -29,4 +33,7 @@ export const useUIStore = create<UIState>((set) => ({
 
   activeSection: 'home',
   setActiveSection: (activeSection) => set({ activeSection }),
+
+  loaderDone: false,
+  setLoaderDone: () => set({ loaderDone: true }),
 }));

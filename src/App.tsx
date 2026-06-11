@@ -1,7 +1,9 @@
 import { CustomCursor } from '@/components/CustomCursor';
 import { Footer } from '@/components/Footer';
 import { Navbar, navItems } from '@/components/Navbar';
+import { Preloader } from '@/components/Preloader';
 import { ScrollProgress } from '@/components/ScrollProgress';
+import { SmoothScroll } from '@/components/SmoothScroll';
 import { About } from '@/components/sections/About';
 import { Contact } from '@/components/sections/Contact';
 import { Experience } from '@/components/sections/Experience';
@@ -16,8 +18,9 @@ export default function App() {
   useSectionObserver(sectionIds);
 
   return (
-    <>
+    <SmoothScroll>
       <div className="noise-overlay" aria-hidden />
+      <Preloader />
       <CustomCursor />
       <Navbar />
       <ScrollProgress />
@@ -32,6 +35,6 @@ export default function App() {
       </main>
 
       <Footer />
-    </>
+    </SmoothScroll>
   );
 }
