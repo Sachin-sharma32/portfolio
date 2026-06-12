@@ -37,3 +37,8 @@ export const useUIStore = create<UIState>((set) => ({
   loaderDone: false,
   setLoaderDone: () => set({ loaderDone: true }),
 }));
+
+// Dev-only handle so the store can be inspected from the browser console.
+if (import.meta.env.DEV && typeof window !== 'undefined') {
+  (window as unknown as Record<string, unknown>).__uiStore = useUIStore;
+}

@@ -1,3 +1,5 @@
+import { lazy, Suspense } from 'react';
+
 import { CustomCursor } from '@/components/CustomCursor';
 import { Footer } from '@/components/Footer';
 import { Navbar, navItems } from '@/components/Navbar';
@@ -12,6 +14,9 @@ import { Projects } from '@/components/sections/Projects';
 import { Skills } from '@/components/sections/Skills';
 import { useSectionObserver } from '@/hooks/useSectionObserver';
 
+// Three.js is heavy — load the 3D layer in its own chunk after first paint.
+const Scene3D = lazy(() => import('@/components/three/Scene3D'));
+
 const sectionIds = navItems.map((n) => n.id);
 
 export default function App() {
@@ -20,6 +25,9 @@ export default function App() {
   return (
     <SmoothScroll>
       <div className="noise-overlay" aria-hidden />
+      <Suspense fallback={null}>
+        <Scene3D />
+      </Suspense>
       <Preloader />
       <CustomCursor />
       <Navbar />
