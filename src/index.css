@@ -190,6 +190,17 @@ html.lenis body {
   }
 }
 
+/* Museum overlays wait half a beat so the auto-entry pointer lock can win the
+   race — if the lock lands first, the overlay unmounts before ever showing. */
+@keyframes overlay-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes marquee {
   from {
     transform: translateX(0);

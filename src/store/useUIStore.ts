@@ -1,8 +1,14 @@
 import { create } from 'zustand';
 
+import type { ExperienceMode } from '@/lib/capabilities';
+
 export type CursorVariant = 'default' | 'hover' | 'view';
 
 type UIState = {
+  /** Which experience is active: immersive 3D museum or the classic scroll site. */
+  mode: ExperienceMode;
+  setMode: (mode: ExperienceMode) => void;
+
   /** Mobile nav open/closed. */
   menuOpen: boolean;
   setMenuOpen: (open: boolean) => void;
@@ -23,6 +29,9 @@ type UIState = {
 };
 
 export const useUIStore = create<UIState>((set) => ({
+  mode: 'classic',
+  setMode: (mode) => set({ mode }),
+
   menuOpen: false,
   setMenuOpen: (menuOpen) => set({ menuOpen }),
   toggleMenu: () => set((s) => ({ menuOpen: !s.menuOpen })),
